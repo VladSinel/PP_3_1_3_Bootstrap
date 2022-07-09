@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1", shrink-to-fit=no>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>User page</title>
+</head>
+
+<body>
+<!--top navbar email + logout-->
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <ul class="navbar-nav mb-2 mb-xl-0 me-auto">
+            <strong><span th:text="${user.email}" class="align-middle mr-1 navbar-text text-white"></span></strong>
+            <span class="align-middle mr-1 navbar-text text-white"> with roles: </span>
+            <span class="align-middle mr-1 navbar-text text-white" th:each="role : ${user.roles}"
+                  th:text="${role.toString() + ' '}"></span>
+        </ul>
+        <ul class="navbar-nav float-lg-end">
+            <li class="nav-item">
+                <a class="nav-link text-muted-light" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!--left sidebar-under panel-->
+<div class="container-fluid bg-light mt-5 pt-5">
+    <div class="row">
+        <div class="col-sm-2 p-0  bg-white min-vh-100">
+            <ul class="nav nav-pills flex-column mt-0 pt-0">
+                <li class="nav-item nav-item mt-0 pt-0" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin}">Admin</a>
+                </li>
+                <li class="nav-item mt-0 pt-0" sec:authorize="hasAnyRole('USER', 'ADMIN')">
+                    <a class="nav-link active" th:href="@{/user}">User</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--right table block-->
+        <div class="col-10 bg-light mt-3 pt-3">
+            <h1><strong>User Information-page</strong></h1>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col border bg-light">
+                        <p><h4>About user</h4></p>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col border bg-white">
+                        <br/>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>UserName</th>
+                                <th>Email</th>
+                                <th>Roles</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user:${user}" class="table-active">
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.name}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${#strings.setJoin(user.getAuthorities,  ' ')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
